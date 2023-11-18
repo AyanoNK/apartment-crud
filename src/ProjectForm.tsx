@@ -25,25 +25,25 @@ import FormError from "./components/FormError";
 //   })
 //   .required();
 
-type ProjectFormProps = {
-  name: string;
-  address: number;
-  link: number;
-  brochure: number;
-  gym: boolean;
-  social_spaces: number;
-  bbq: boolean;
-  game_salon: boolean;
-  court: boolean;
-  delivery_date: string;
-  status: string;
-  separation_amount: number;
-  company: string;
-  city: string;
-  contact_name: string;
-  contact_phone: number;
-  pool: boolean;
-};
+// type ProjectFormProps = {
+//   name: string;
+//   address: number;
+//   link: number;
+//   brochure: number;
+//   gym: boolean;
+//   social_spaces: number;
+//   bbq: boolean;
+//   game_salon: boolean;
+//   court: boolean;
+//   delivery_date: string;
+//   status: string;
+//   separation_amount: number;
+//   company: string;
+//   city: string;
+//   contact_name: string;
+//   contact_phone: number;
+//   pool: boolean;
+// };
 
 export default function ProjectForm() {
   const {
