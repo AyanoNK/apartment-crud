@@ -1,4 +1,4 @@
-import { UseFormRegister, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import projectSchema from "./schemas/forms/projectSchema";
 import FormError from "./components/FormError";
