@@ -1,57 +1,49 @@
 import "./App.css";
-import { useContext, useEffect, useState } from "react";
+import { Suspense, useContext } from "react";
 import { SupabaseContext } from "./main";
-import { PostgrestError } from "@supabase/supabase-js";
+import { suspend } from "suspend-react";
+import ListLoading from "./components/ListLoading";
+import { Link, useLocation } from "wouter";
 
-export default function ApartmentsList({ params }: any) {
-  const options: Intl.DateTimeFormatOptions = {
-    hour12: false,
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    minute: undefined,
-    second: undefined,
-  };
+export default function ProjectsList({ params }: any) {
   const supabase = useContext(SupabaseContext);
-  const [apartments, setApartments] = useState<any[]>([]);
-  const [error, setError] = useState<PostgrestError | null>(null);
+  const [location] = useLocation();
 
-  async function getProjects() {
-    const { data: apartments, error } = await supabase
-      .from(" apartment")
-      .select("*")
-      .eq("project", params.projectId);
+  const List = () => {
+    const data = suspend(async () => {
+      const { data: apartments, error } = await supabase
+        .from(" apartment")
+        .select("*")
+        .eq("project", params.projectId);
+      return { apartments, error };
+    }, [location]);
 
-    setApartments(apartments);
-    setError(error);
-  }
+    const { apartments, error } = data;
 
-  useEffect(() => {
-    getProjects();
-    if (error) console.error(error);
-  }, []);
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-row items-center justify-between">
+          <h3 className="text-2xl">Apartments</h3>
+          <Link href="/apartment/new">
+            <a className="text-md">Add apartment</a>
+          </Link>
+        </div>
+        {apartments.length === 0 && (
+          <div className="flex flex-col gap-y-4">
+            <span>No apartments</span>
+            <Link href="/">
+              <a className="text-md">Go back to projects...</a>
+            </Link>
+          </div>
+        )}
+        {error && <div>Error: {error.message}</div>}
+      </div>
+    );
+  };
 
   return (
-    <div>
-      <div className="flex flex-col">
-        {error && <div>Error: {error.message}</div>}
-        {apartments && apartments.length === 0 && <div>No apartments</div>}
-        {apartments &&
-          apartments.map((project) => (
-            <div className="flex flex-col border-red-500 border p-4 rounded">
-              <span className="text-3xl font-bold pb-4">{project.name}</span>
-              <span className="text-lg font-semibold">
-                {project.address}, {project.city}
-              </span>
-              <span className="text-sm">
-                To be finished in{" "}
-                {new Intl.DateTimeFormat("en", options).format(
-                  Date.parse(project.delivery_date)
-                )}
-              </span>
-            </div>
-          ))}
-      </div>
-    </div>
+    <Suspense fallback={<ListLoading />}>
+      <List />
+    </Suspense>
   );
 }

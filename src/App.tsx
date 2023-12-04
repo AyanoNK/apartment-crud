@@ -1,19 +1,14 @@
-import { Link, useLocation } from "wouter";
+import { Link, useLocation, useRoute } from "wouter";
 
 function App({ children }: any) {
-  const [location] = useLocation();
+  // TODO: check out https://www.npmjs.com/package/react-transition-group
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-y-4 w-full">
       <div className="flex flex-row flex-wrap items-center justify-between">
         <Link href="/">
-          <a className="text-4xl">Projects</a>
+          <a className="text-4xl">Apartment CRUD</a>
         </Link>
-        {location === "/" && (
-          <Link href="/project/new">
-            <a className="text-md">Add project</a>
-          </Link>
-        )}
       </div>
       {children}
     </div>

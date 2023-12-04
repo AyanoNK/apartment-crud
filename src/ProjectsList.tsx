@@ -1,22 +1,15 @@
 import "./App.css";
 import { Suspense, useContext } from "react";
 import { SupabaseContext } from "./main";
-import { Link } from "wouter";
+import { Link, useLocation, useRoute } from "wouter";
 import { LinkIcon } from "@heroicons/react/24/solid";
 import { suspend } from "suspend-react";
 import ListLoading from "./components/ListLoading";
+import { options } from "./utils/date";
 
 export default function ProjectsList() {
-  const options: Intl.DateTimeFormatOptions = {
-    hour12: false,
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    minute: undefined,
-    second: undefined,
-  };
-
   const supabase = useContext(SupabaseContext);
+  const [location] = useLocation();
 
   const List = () => {
     const data = suspend(async () => {
@@ -24,12 +17,18 @@ export default function ProjectsList() {
         .from("project")
         .select("*");
       return { projects, error };
-    }, []);
+    }, [location]);
 
     const { projects, error } = data;
 
     return (
       <div className="flex flex-col gap-4">
+        <div className="flex flex-row items-center justify-between">
+          <h3 className="text-2xl">Projects</h3>
+          <Link href="/apartment/new">
+            <a className="text-md">Add project</a>
+          </Link>
+        </div>
         {projects.length === 0 && <div>No projects</div>}
         {error && <div>Error: {error.message}</div>}
         {projects.map((project: any) => (
