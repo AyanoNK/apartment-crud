@@ -19,6 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/" component={ProjectsList} />
         <Route path="/:projectId" component={ApartmentsList} />
         <Route path="/project/new" component={ProjectForm} />
+        <Route path="/:projectId/apartment/new" component={ProjectForm} />
       </App>
     </SupabaseContext.Provider>
   </React.StrictMode>
