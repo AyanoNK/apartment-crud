@@ -24,7 +24,7 @@ export default function ProjectsList({ params }: any) {
       <div className="flex flex-col gap-4">
         <div className="flex flex-row items-center justify-between">
           <h3 className="text-2xl">Apartments</h3>
-          <Link href="/apartment/new">
+          <Link href={`${location}/apartment/new`}>
             <a className="text-md">Add apartment</a>
           </Link>
         </div>
