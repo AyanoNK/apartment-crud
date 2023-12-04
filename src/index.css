@@ -6,3 +6,9 @@ body {
   place-items: normal start;
   justify-content: center;
 }
+
+@media (prefers-color-scheme: light) {
+  html {
+    color-scheme: dark;
+  }
+}
