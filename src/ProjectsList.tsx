@@ -1,7 +1,7 @@
 import "./App.css";
 import { Suspense, useContext } from "react";
 import { SupabaseContext } from "./main";
-import { Link, useLocation, useRoute } from "wouter";
+import { Link, useLocation } from "wouter";
 import { LinkIcon } from "@heroicons/react/24/solid";
 import { suspend } from "suspend-react";
 import ListLoading from "./components/ListLoading";

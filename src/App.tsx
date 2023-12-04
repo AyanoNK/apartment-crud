@@ -1,4 +1,4 @@
-import { Link, useLocation, useRoute } from "wouter";
+import { Link } from "wouter";
 
 function App({ children }: any) {
   // TODO: check out https://www.npmjs.com/package/react-transition-group
