@@ -1,13 +1,19 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 
 function App({ children }: any) {
+  const [location] = useLocation();
+
   return (
-    <div className="flex flex-col gap-4 min-w-full">
-      <div className="flex flex-row flex-wrap justify-between">
+    <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-row flex-wrap items-center justify-between">
         <Link href="/">
-          <a className="link">Projects</a>
+          <a className="text-4xl">Projects</a>
         </Link>
-        <Link href="/project/new">Add project</Link>
+        {location === "/" && (
+          <Link href="/project/new">
+            <a className="text-md">Add project</a>
+          </Link>
+        )}
       </div>
       {children}
     </div>
