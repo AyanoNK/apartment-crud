@@ -31,8 +31,6 @@ export default function ApartmentsList({ params }: any) {
     if (error) console.error(error);
   }, []);
 
-  console.log(error);
-
   return (
     <div>
       <div className="flex flex-col">

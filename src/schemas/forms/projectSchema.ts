@@ -3,9 +3,9 @@ import * as yup from "yup";
 const projectSchema = yup
   .object({
     name: yup.string().required(),
-    address: yup.number().positive().integer().required(),
-    link: yup.number().positive().integer().required(),
-    brochure: yup.number().positive().integer().required(),
+    address: yup.string().required(),
+    link: yup.string().required(),
+    brochure: yup.string().required(),
     gym: yup.boolean().required(),
     social_spaces: yup.number().required(),
     bbq: yup.boolean().required(),
