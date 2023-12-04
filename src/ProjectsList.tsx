@@ -1,8 +1,10 @@
 import "./App.css";
-import { useContext, useEffect, useState } from "react";
+import { Suspense, useContext } from "react";
 import { SupabaseContext } from "./main";
-import { PostgrestError } from "@supabase/supabase-js";
 import { Link } from "wouter";
+import { LinkIcon } from "@heroicons/react/24/solid";
+import { suspend } from "suspend-react";
+import ListLoading from "./components/ListLoading";
 
 export default function ProjectsList() {
   const options: Intl.DateTimeFormatOptions = {
@@ -13,44 +15,38 @@ export default function ProjectsList() {
     minute: undefined,
     second: undefined,
   };
+
   const supabase = useContext(SupabaseContext);
-  const [projects, setProjects] = useState<any[]>([]);
-  const [error, setError] = useState<PostgrestError | null>(null);
-  async function getProjects() {
-    const { data: projects, error } = await supabase
-      .from("project")
-      .select("*");
 
-    setProjects(projects);
-    setError(error);
-  }
+  const List = () => {
+    const data = suspend(async () => {
+      const { data: projects, error } = await supabase
+        .from("project")
+        .select("*");
+      return { projects, error };
+    }, []);
 
-  useEffect(() => {
-    getProjects();
-    if (error) console.error(error);
-  }, []);
+    const { projects, error } = data;
 
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-row gap-4 w-full justify-end">
-        <Link href="/project/new" className="p-2">
-          Add project
-        </Link>
-      </div>
-      <div className="flex flex-col">
+    return (
+      <div className="flex flex-col gap-4">
         {projects.length === 0 && <div>No projects</div>}
-        {projects.map((project) => (
+        {error && <div>Error: {error.message}</div>}
+        {projects.map((project: any) => (
           <Link
             href={`/${project.id}`}
             className="flex flex-col border-red-500 border p-4 rounded"
             key={project.id}
           >
-            <span className="text-2xl font-bold pb-4">{project.name}</span>
+            <div className="flex flex-row justify-between">
+              <span className="text-2xl font-bold pb-4">{project.name}</span>
+              <LinkIcon className="h-6 w-6 text-blue-500" />
+            </div>
             <span className="text-md font-semibold">
               {project.address}, {project.city}
             </span>
             <span className="text-sm">
-              To be finished in{" "}
+              Finishes in{" "}
               {new Intl.DateTimeFormat("en", options).format(
                 Date.parse(project.delivery_date)
               )}
@@ -58,6 +54,12 @@ export default function ProjectsList() {
           </Link>
         ))}
       </div>
-    </div>
+    );
+  };
+
+  return (
+    <Suspense fallback={<ListLoading />}>
+      <List />
+    </Suspense>
   );
 }
